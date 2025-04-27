@@ -1,11 +1,11 @@
-// filepath: c:\work\CODEs\hrms_frontend\hrms_frontend\src\pages\Dashboard.tsx
 import React from 'react';
+import Attendance from './Attendance'; // Import the Attendance component
 
 const Dashboard: React.FC = () => {
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Welcome to the Dashboard</h1>
-      <p>This is the main dashboard page.</p>
+    <div className="min-h-screen bg-gray-100 p-6">
+      <h1 className="text-3xl font-bold text-center mb-6">Dashboard</h1>
+      <Attendance /> {/* Include the Attendance component */}
     </div>
   );
 };

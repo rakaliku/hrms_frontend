@@ -1,5 +1,5 @@
 module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx}'], // Adjust the path based on your project structure
+  content: ['./src/**/*.{js,jsx,ts,tsx}'], // Adjust this path based on your project structure
   theme: {
     extend: {},
   },
