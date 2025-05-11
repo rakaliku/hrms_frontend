@@ -14,7 +14,7 @@ const Attendance: React.FC = () => {
 
     const currentTime = new Date().toISOString(); // Get current time in ISO format
     try {
-      const response = await fetch('http://127.0.0.1:8004/attendance/checkin', {
+      const response = await fetch('http://127.0.0.1:8005/attendance/checkin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
