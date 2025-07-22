@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Register from './pages/Register'; // Import the Register component
 import Dashboard from './pages/Dashboard'; // Import the Dashboard component
 import UserProfile from './pages/UserProfile'; // Import the UserProfile component
+import Header from './pages/Header';
 
 const rootElement = document.getElementById('root');
 
@@ -20,6 +21,7 @@ if (rootElement) {
           <Route path="/dashboard" element={<Dashboard />} /> {/* Add Dashboard route */}
           <Route path="/adddepartment" element={<AddDepartment />} />
           <Route path="/profile" element={<UserProfile />} /> {/* Add User Profile route */}
+          <Route path="/header" element={<Header />} /> {/* Add Header route */}
         </Routes>
       </BrowserRouter>
     </React.StrictMode>

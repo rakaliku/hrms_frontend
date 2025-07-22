@@ -47,6 +47,8 @@ const Dashboard: React.FC = () => {
   const checkedOut = attendanceRecords.filter((record) => record.attendance_status === 'Out').length;
 
   return (
+    <div className="container mx-auto px-4">
+      
     <div className="min-h-screen bg-gray-100 p-6">
       <h1 className="text-3xl font-bold text-center mb-6">Dashboard</h1>
 
@@ -124,6 +126,7 @@ const Dashboard: React.FC = () => {
 
       {/* Check-In/Check-Out Logic */}
       <Attendance />
+    </div>
     </div>
   );
 };
