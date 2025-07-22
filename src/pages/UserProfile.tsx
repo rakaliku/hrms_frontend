@@ -26,7 +26,7 @@ const UserProfile: React.FC = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
+        
         setStatus('Checked In');
         setCheckInTime(currentTime);
         alert(`Check-In successful! Date: ${currentTime}`);
@@ -59,7 +59,7 @@ const UserProfile: React.FC = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
+        
         setStatus('Checked Out');
         alert(`Check-Out successful! Date: ${currentTime}`);
       } else {
