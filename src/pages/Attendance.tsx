@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+
 const Attendance: React.FC = () => {
   const [employeeId, setEmployeeId] = useState<number | null>(null);
   const [status, setStatus] = useState<string | null>(null);
@@ -14,7 +15,7 @@ const Attendance: React.FC = () => {
 
     const currentTime = new Date().toISOString(); // Get current time in ISO format
     try {
-      const response = await fetch('http://127.0.0.1:8005/attendance/checkin', {
+      const response = await fetch('http://127.0.0.1:8004/attendance/checkin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -69,6 +70,12 @@ const Attendance: React.FC = () => {
     }
   };
 
+  console.log('Attendance component rendered');
+  console.log('employeeId:', employeeId);
+  console.log('status:', status);
+  console.log('checkInTime:', checkInTime);
+  console.log('checkOutTime:', checkOutTime);
+
   return (
     <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
       <h2 className="text-2xl font-bold mb-6 text-center">Employee Attendance</h2>
@@ -101,6 +108,9 @@ const Attendance: React.FC = () => {
         >
           Check-Out
         </button>
+      </div>
+      <div style={{marginTop: '2rem', color: 'red', fontWeight: 'bold'}}>
+        Debug: Attendance component rendered. Check browser console for details.
       </div>
     </div>
   );

@@ -1,7 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import Attendance from './Attendance'; // Import the Attendance component
-import Calendar from 'react-calendar'; // Install with `npm install react-calendar`
-import 'react-calendar/dist/Calendar.css'; // Import calendar styles
+import Attendance from './Attendance';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import {
+  Box,
+  Drawer,
+  AppBar,
+  Toolbar,
+  Typography,
+  Avatar,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Grid,
+  Card,
+  CardContent,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  CircularProgress,
+} from '@mui/material';
+import PeopleIcon from '@mui/icons-material/People';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 interface AttendanceRecord {
   employee_id: number;
@@ -11,15 +39,17 @@ interface AttendanceRecord {
   check_out: string | null;
 }
 
+const drawerWidth = 240;
+
 const Dashboard: React.FC = () => {
   const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch attendance records from the backend
     const fetchAttendanceRecords = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8005/attendance/all/'); // Replace with your backend endpoint
+        const response = await fetch('http://127.0.0.1:8004/attendance/all/');
         if (response.ok) {
           const data = await response.json();
           setAttendanceRecords(data);
@@ -28,106 +58,165 @@ const Dashboard: React.FC = () => {
         }
       } catch (error) {
         console.error('Error fetching attendance records:', error);
+      } finally {
+        setLoading(false);
       }
     };
-
     fetchAttendanceRecords();
   }, []);
 
-  // Filter attendance records for the selected date
   const filteredRecords = selectedDate
-    ? attendanceRecords.filter((record) =>
-        new Date(record.check_in).toDateString() === selectedDate.toDateString()
+    ? attendanceRecords.filter(
+        (record) => new Date(record.check_in).toDateString() === selectedDate.toDateString()
       )
     : attendanceRecords;
 
-  // Calculate attendance stats
   const totalEmployees = attendanceRecords.length;
   const checkedIn = attendanceRecords.filter((record) => record.attendance_status === 'In').length;
   const checkedOut = attendanceRecords.filter((record) => record.attendance_status === 'Out').length;
 
   return (
-    <div className="container mx-auto px-4">
-      
-    <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold text-center mb-6">Dashboard</h1>
-
-      {/* Dashboard Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div className="bg-white shadow-md rounded-lg p-4 text-center">
-          <h2 className="text-xl font-bold">Total Employees</h2>
-          <p className="text-2xl font-semibold text-indigo-600">{totalEmployees}</p>
-        </div>
-        <div className="bg-white shadow-md rounded-lg p-4 text-center">
-          <h2 className="text-xl font-bold">Checked In</h2>
-          <p className="text-2xl font-semibold text-green-600">{checkedIn}</p>
-        </div>
-        <div className="bg-white shadow-md rounded-lg p-4 text-center">
-          <h2 className="text-xl font-bold">Checked Out</h2>
-          <p className="text-2xl font-semibold text-red-600">{checkedOut}</p>
-        </div>
-      </div>
-
-      {/* Calendar */}
-      <div className="bg-white shadow-md rounded-lg p-4 mb-6">
-        <h2 className="text-xl font-bold mb-4">Attendance Calendar</h2>
-        <Calendar
-          onChange={(date) => setSelectedDate(date as Date)}
-          value={selectedDate}
-          tileClassName={({ date }) => {
-            const isCheckedIn = attendanceRecords.some(
-              (record) => new Date(record.check_in).toDateString() === date.toDateString()
-            );
-            return isCheckedIn ? 'bg-green-200' : '';
-          }}
-        />
-      </div>
-
-      {/* Attendance Table */}
-      <div className="overflow-x-auto bg-white shadow-md rounded-lg p-4 mb-6">
-        <h2 className="text-xl font-bold mb-4">Attendance Records</h2>
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Employee ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Check-In Time
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Check-Out Time
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {filteredRecords.map((record) => (
-              <tr key={record.attendance_id}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {record.employee_id}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {new Date(record.check_in).toLocaleString()}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {record.check_out ? new Date(record.check_out).toLocaleString() : 'N/A'}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {record.attendance_status}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Check-In/Check-Out Logic */}
-      <Attendance />
-    </div>
-    </div>
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#f5f6fa' }}>
+      {/* Sidebar */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+        }}
+      >
+        <Toolbar>
+          <Typography variant="h5" color="primary" fontWeight="bold">
+            HRMS
+          </Typography>
+        </Toolbar>
+        <List>
+          <ListItem button component="a" href="/dashboard">
+            <ListItemIcon>
+              <DashboardIcon color="primary" />
+            </ListItemIcon>
+            <ListItemText primary="Dashboard" />
+          </ListItem>
+          <ListItem button component="a" href="/attendance">
+            <ListItemIcon>
+              <CalendarMonthIcon color="primary" />
+            </ListItemIcon>
+            <ListItemText primary="Attendance" />
+          </ListItem>
+        </List>
+      </Drawer>
+      {/* Main Content */}
+      <Box component="main" sx={{ flexGrow: 1, p: 4 }}>
+        {/* Header */}
+        <AppBar position="static" color="inherit" elevation={0} sx={{ mb: 4 }}>
+          <Toolbar sx={{ justifyContent: 'space-between' }}>
+            <Typography variant="h4" color="primary" fontWeight="bold">
+              Dashboard
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Typography color="textSecondary">Welcome, Admin</Typography>
+              <Avatar src="/avatar.png" />
+            </Box>
+          </Toolbar>
+        </AppBar>
+        {/* Cards */}
+        <Grid container spacing={3} sx={{ mb: 3 }}>
+          <Grid item xs={12} md={4}>
+            <Card sx={{ bgcolor: 'primary.main', color: 'white' }}>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <PeopleIcon sx={{ fontSize: 40, mb: 1 }} />
+                <Typography variant="h6">Total Employees</Typography>
+                <Typography variant="h4" fontWeight="bold">{totalEmployees}</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Card sx={{ bgcolor: 'success.main', color: 'white' }}>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <LoginIcon sx={{ fontSize: 40, mb: 1 }} />
+                <Typography variant="h6">Checked In</Typography>
+                <Typography variant="h4" fontWeight="bold">{checkedIn}</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Card sx={{ bgcolor: 'error.main', color: 'white' }}>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <LogoutIcon sx={{ fontSize: 40, mb: 1 }} />
+                <Typography variant="h6">Checked Out</Typography>
+                <Typography variant="h4" fontWeight="bold">{checkedOut}</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+        {/* Calendar and Table */}
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6" fontWeight="bold" mb={2}>
+                  Attendance Calendar
+                </Typography>
+                <Calendar
+                  onChange={(date) => setSelectedDate(date as Date)}
+                  value={selectedDate}
+                  tileClassName={({ date }) => {
+                    const isCheckedIn = attendanceRecords.some(
+                      (record) => new Date(record.check_in).toDateString() === date.toDateString()
+                    );
+                    return isCheckedIn ? 'bg-green-200' : '';
+                  }}
+                />
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6" fontWeight="bold" mb={2}>
+                  Attendance Records
+                </Typography>
+                {loading ? (
+                  <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                    <CircularProgress />
+                  </Box>
+                ) : (
+                  <TableContainer component={Paper}>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Employee ID</TableCell>
+                          <TableCell>Check-In Time</TableCell>
+                          <TableCell>Check-Out Time</TableCell>
+                          <TableCell>Status</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {filteredRecords.map((record) => (
+                          <TableRow key={record.attendance_id}>
+                            <TableCell>{record.employee_id}</TableCell>
+                            <TableCell>{new Date(record.check_in).toLocaleString()}</TableCell>
+                            <TableCell>
+                              {record.check_out ? new Date(record.check_out).toLocaleString() : 'N/A'}
+                            </TableCell>
+                            <TableCell>{record.attendance_status}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+        {/* Attendance Actions */}
+        <Box sx={{ mt: 4 }}>
+          <Attendance />
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

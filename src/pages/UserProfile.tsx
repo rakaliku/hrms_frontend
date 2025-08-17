@@ -13,7 +13,7 @@ const UserProfile: React.FC = () => {
 
     const currentTime = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
     try {
-      const response = await fetch('http://127.0.0.1:8000/attendance/checkin', {
+      const response = await fetch('http://127.0.0.1:8004/attendance/checkin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ const UserProfile: React.FC = () => {
 
     const currentTime = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
     try {
-      const response = await fetch('http://127.0.0.1:8000/attendance/checkout', {
+      const response = await fetch('http://127.0.0.1:8004/attendance/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

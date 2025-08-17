@@ -8,7 +8,7 @@ const AddDepartment: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const result = await axios.post('http://127.0.0.1:8000/departments/', {
+      const result = await axios.post('http://127.0.0.1:8004/departments/', {
         name: departmentName,
       });
       setResponse(`Department created: ID = ${result.data.id}`);
