@@ -30,6 +30,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { Link } from 'react-router-dom';
 
 interface AttendanceRecord {
   employee_id: number;
@@ -92,13 +93,13 @@ const Dashboard: React.FC = () => {
           </Typography>
         </Toolbar>
         <List>
-          <ListItem button component="a" href="/dashboard">
+          <ListItem button component={Link} to="/dashboard">
             <ListItemIcon>
               <DashboardIcon color="primary" />
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItem>
-          <ListItem button component="a" href="/attendance">
+          <ListItem button component={Link} to="/attendance">
             <ListItemIcon>
               <CalendarMonthIcon color="primary" />
             </ListItemIcon>
@@ -122,7 +123,7 @@ const Dashboard: React.FC = () => {
         </AppBar>
         {/* Cards */}
         <Grid container spacing={3} sx={{ mb: 3 }}>
-          <Grid item xs={12} md={4}>
+          <Grid container item xs={12} md={4}>
             <Card sx={{ bgcolor: 'primary.main', color: 'white' }}>
               <CardContent sx={{ textAlign: 'center' }}>
                 <PeopleIcon sx={{ fontSize: 40, mb: 1 }} />
@@ -131,15 +132,7 @@ const Dashboard: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} md={4}>
-            <Card sx={{ bgcolor: 'success.main', color: 'white' }}>
-              <CardContent sx={{ textAlign: 'center' }}>
-                <LoginIcon sx={{ fontSize: 40, mb: 1 }} />
-                <Typography variant="h6">Checked In</Typography>
-                <Typography variant="h4" fontWeight="bold">{checkedIn}</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+
           <Grid item xs={12} md={4}>
             <Card sx={{ bgcolor: 'error.main', color: 'white' }}>
               <CardContent sx={{ textAlign: 'center' }}>
